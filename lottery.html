@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>群抽奖助手 - 自定义定时抽奖</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .left-panel, .right-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .panel {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+        
+        h2 {
+            color: #4a00e0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #4a00e0;
+            outline: none;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(142, 45, 226, 0.3);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .participant-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .participant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4a00e0;
+        }
+        
+        .participant-name {
+            font-weight: 600;
+        }
+        
+        .participant-actions button {
+            margin-left: 5px;
+        }
+        
+        .timer {
+            font-size: 2.8rem;
+            font-weight: bold;
+            text-align: center;
+            color: #4a00e0;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .prize-display {
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px dashed #8e2de2;
+        }
+        
+        .prize-title {
+            font-size: 1.5rem;
+            color: #4a00e0;
+            margin-bottom: 10px;
+        }
+        
+        .prize-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .winners-list {
+            margin-top: 20px;
+        }
+        
+        .winner-item {
+            padding: 15px;
+            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #d45a00;
+            font-size: 1.2rem;
+        }
+        
+        .share-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .share-btn {
+            background-color: #12b7f5;
+            margin: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .share-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-buttons .btn {
+            flex: 1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .left-panel, .right-panel {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .timer {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-gift"></i> 群抽奖助手</h1>
+            <p class="subtitle">自定义奖品 | 定时开奖 | 支持多人参与 | 一键分享到QQ群</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="panel">
+                    <h2><i class="fas fa-cog"></i> 抽奖设置</h2>
+                    
+                    <div class="form-group">
+                        <label for="prizeName"><i class="fas fa-trophy"></i> 奖品名称</label>
+                        <input type="text" id="prizeName" placeholder="例如：50元红包、游戏皮肤、自定义奖品..." value="50元现金红包">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prizeDescription"><i class="fas fa-file-alt"></i> 奖品描述</label>
+                        <textarea id="prizeDescription" placeholder="请详细描述奖品内容、使用规则等信息...">恭喜中奖！中奖后请联系管理员领取50元现金红包，有效期30天。</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="winnerCount"><i class="fas fa-users"></i> 中奖人数</label>
+                        <input type="number" id="winnerCount" min="1" max="50" value="3">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timerHours"><i class="fas fa-clock"></i> 开奖倒计时（小时）</label>
+                        <input type="number" id="timerHours" min="0.1" max="24" step="0.1" value="1">
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="saveSettings">
+                            <i class="fas fa-save"></i> 保存设置
+                        </button>
+                        <button class="btn btn-secondary" id="startDraw">
+                            <i class="fas fa-play"></i> 开始抽奖
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h2><i class="fas fa-user-plus"></i> 添加参与者</h2>
+                    
+                    <div class="form-group">
+                        <label for="participantName"><i class="fas fa-user"></i> 参与者姓名</label>
+                        <input type="text" id="participantName" placeholder="输入参与者姓名">
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="addParticipant">
+                            <i class="fas fa-plus"></i> 添加单个参与者
+                        </button>
+                        <button class="btn btn-secondary" id="addRandomParticipants">
+                            <i class="fas fa-random"></i> 随机生成10人
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="panel">
+                    <h2><i class="fas fa-users"></i> 参与者列表 <span id="participantCount">(0人)</span></h2>
+                    
+                    <div class="participant-list" id="participantList">
+                        <div class="empty-message">
+                            暂无参与者，请添加参与者到列表中
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-danger" id="clearAll">
+                            <i class="fas fa-trash"></i> 清空列表
+                        </button>
+                        <button class="btn" id="exportList">
+                            <i class="fas fa-download"></i> 导出名单
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h2><i class="fas fa-hourglass-half"></i> 抽奖倒计时</h2>
+                    
+                    <div class="timer" id="countdownTimer">
+                        01:00:00
+                    </div>
+                    
+                    <div class="prize-display">
+                        <div class="prize-title" id="currentPrizeName">50元现金红包</div>
+                        <div class="prize-description" id="currentPrizeDescription">
+                            恭喜中奖！中奖后请联系管理员领取50元现金红包，有效期30天。
+                        </div>
+                    </div>
+                    
+                    <div class="winners-list" id="winnersList">
+                        <!-- 中奖者将在这里显示 -->
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" id="drawNow">
+                            <i class="fas fa-bolt"></i> 立即开奖
+                        </button>
+                        <button class="btn btn-danger" id="resetDraw">
+                            <i class="fas fa-redo"></i> 重置抽奖
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="share-section">
+            <h2><i class="fas fa-share-alt"></i> 分享到QQ群</h2>
+            <p>将本次抽奖分享到QQ群，邀请更多朋友参与！</p>
+            
+            <button class="btn share-btn" id="shareQQ">
+                <i class="fab fa-qq"></i> 分享到QQ
+            </button>
+            <button class="btn share-btn" id="copyLink">
+                <i class="fas fa-link"></i> 复制抽奖链接
+            </button>
+            
+            <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                提示：复制链接后，可以在QQ群中直接粘贴分享
+            </div>
+        </div>
+        
+        <footer>
+            <p>群抽奖助手 &copy; 2023 | 支持自定义奖品 | 定时开奖 | 参与者管理</p>
+            <p>提示：所有数据保存在浏览器本地，清空浏览器缓存会丢失数据</p>
+        </footer>
+    </div>
+
+    <script>
+        // 初始化变量
+        let participants = JSON.parse(localStorage.getItem('lotteryParticipants')) || [];
+        let lotterySettings = JSON.parse(localStorage.getItem('lotterySettings')) || {
+            prizeName: '50元现金红包',
+            prizeDescription: '恭喜中奖！中奖后请联系管理员领取50元现金红包，有效期30天。',
+            winnerCount: 3,
+            timerHours: 1,
+            drawStarted: false,
+            drawTime: null,
+            winners: []
+        };
+        
+        let countdownInterval = null;
+        
+        // DOM元素
+        const participantList = document.getElementById('participantList');
+        const participantCount = document.getElementById('participantCount');
+        const participantNameInput = document.getElementById('participantName');
+        const prizeNameInput = document.getElementById('prizeName');
+        const prizeDescriptionInput = document.getElementById('prizeDescription');
+        const winnerCountInput = document.getElementById('winnerCount');
+        const timerHoursInput = document.getElementById('timerHours');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const currentPrizeName = document.getElementById('currentPrizeName');
+        const currentPrizeDescription = document.getElementById('currentPrizeDescription');
+        const winnersList = document.getElementById('winnersList');
+        
+        // 初始化页面
+        function initPage() {
+            // 加载保存的设置
+            prizeNameInput.value = lotterySettings.prizeName;
+            prizeDescriptionInput.value = lotterySettings.prizeDescription;
+            winnerCountInput.value = lotterySettings.winnerCount;
+            timerHoursInput.value = lotterySettings.timerHours;
+            
+            // 更新显示
+            currentPrizeName.textContent = lotterySettings.prizeName;
+            currentPrizeDescription.textContent = lotterySettings.prizeDescription;
+            
+            // 加载参与者列表
+            updateParticipantList();
+            
+            // 如果抽奖已经开始，恢复倒计时
+            if (lotterySettings.drawStarted && lotterySettings.drawTime) {
+                startCountdown();
+            }
+            
+            // 如果已有中奖者，显示他们
+            if (lotterySettings.winners && lotterySettings.winners.length > 0) {
+                displayWinners();
+            }
+        }
+        
+        // 更新参与者列表显示
+        function updateParticipantList() {
+            participantCount.textContent = `(${participants.length}人)`;
+            
+            if (participants.length === 0) {
+                participantList.innerHTML = '<div class="empty-message">暂无参与者，请添加参与者到列表中</div>';
+                return;
+            }
+            
+            participantList.innerHTML = '';
+            
+            participants.forEach((participant, index) => {
+                const participantItem = document.createElement('div');
+                participantItem.className = 'participant-item';
+                participantItem.innerHTML = `
+                    <div class="participant-name">${participant}</div>
+                    <div class="participant-actions">
+                        <button class="btn btn-small btn-danger delete-btn" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                participantList.appendChild(participantItem);
+            });
+            
+            // 添加删除按钮事件监听
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteParticipant(index);
+                });
+            });
+        }
+        
+        // 添加参与者
+        function addParticipant() {
+            const name = participantNameInput.value.trim();
+            
+            if (!name) {
+                alert('请输入参与者姓名！');
+                participantNameInput.focus();
+                return;
+            }
+            
+            if (participants.includes(name)) {
+                alert('该参与者已存在！');
+                participantNameInput.value = '';
+                participantNameInput.focus();
+                return;
+            }
+            
+            participants.push(name);
+            saveParticipants();
+            updateParticipantList();
+            
+            participantNameInput.value = '';
+            participantNameInput.focus();
+            
+            showMessage(`已添加参与者: ${name}`);
+        }
+        
+        // 删除参与者
+        function deleteParticipant(index) {
+            const name = participants[index];
+            participants.splice(index, 1);
+            saveParticipants();
+            updateParticipantList();
+            
+            showMessage(`已删除参与者: ${name}`);
+        }
+        
+        // 保存参与者到本地存储
+        function saveParticipants() {
+            localStorage.setItem('lotteryParticipants', JSON.stringify(participants));
+        }
+        
+        // 保存抽奖设置
+        function saveSettings() {
+            lotterySettings.prizeName = prizeNameInput.value.trim() || '未命名奖品';
+            lotterySettings.prizeDescription = prizeDescriptionInput.value.trim() || '无描述';
+            lotterySettings.winnerCount = parseInt(winnerCountInput.value) || 1;
+            lotterySettings.timerHours = parseFloat(timerHoursInput.value) || 1;
+            
+            // 更新显示
+            currentPrizeName.textContent = lotterySettings.prizeName;
+            currentPrizeDescription.textContent = lotterySettings.prizeDescription;
+            
+            localStorage.setItem('lotterySettings', JSON.stringify(lotterySettings));
+            
+            showMessage('抽奖设置已保存！');
+        }
+        
+        // 开始抽奖
+        function startDraw() {
+            if (participants.length < lotterySettings.winnerCount) {
+                alert(`参与者数量不足！当前有${participants.length}人，但设置了${lotterySettings.winnerCount}个中奖名额。`);
+                return;
+            }
+            
+            if (lotterySettings.drawStarted) {
+                alert('抽奖已经开始，请等待倒计时结束或重置抽奖！');
+                return;
+            }
+            
+            // 保存设置
+            saveSettings();
+            
+            // 设置抽奖开始时间和状态
+            lotterySettings.drawStarted = true;
+            lotterySettings.drawTime = new Date().getTime() + (lotterySettings.timerHours * 60 * 60 * 1000);
+            lotterySettings.winners = [];
+            
+            localStorage.setItem('lotterySettings', JSON.stringify(lotterySettings));
+            
+            // 开始倒计时
+            startCountdown();
+            
+            showMessage(`抽奖已开始！将在${lotterySettings.timerHours}小时后自动开奖。`);
+        }
+        
+        // 开始倒计时
+        function startCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            function updateTimer() {
+                const now = new Date().getTime();
+                const drawTime = lotterySettings.drawTime;
+                
+                if (!drawTime) {
+                    countdownTimer.textContent = "未设置";
+                    return;
+                }
+                
+                const timeLeft = drawTime - now;
+                
+                if (timeLeft <= 0) {
+                    // 时间到，进行抽奖
+                    performDraw();
+                    clearInterval(countdownInterval);
+                    return;
+                }
+                
+                // 计算小时、分钟、秒
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                // 格式化显示
+                countdownTimer.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // 立即更新一次
+            updateTimer();
+            
+            // 每秒更新一次
+            countdownInterval = setInterval(updateTimer, 1000);
+        }
+        
+        // 执行抽奖
+        function performDraw() {
+            if (lotterySettings.winners && lotterySettings.winners.length > 0) {
+                // 已抽过奖，直接显示结果
+                displayWinners();
+                return;
+            }
+            
+            // 检查参与者数量
+            if (participants.length < lotterySettings.winnerCount) {
+                alert(`参与者数量不足！无法抽奖。`);
+                return;
+            }
+            
+            // 复制参与者数组以避免修改原数组
+            const availableParticipants = [...participants];
+            const winners = [];
+            
+            // 随机选择中奖者
+            for (let i = 0; i < lotterySettings.winnerCount; i++) {
+                if (availableParticipants.length === 0) break;
+                
+                const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+                winners.push(availableParticipants[randomIndex]);
+                availableParticipants.splice(randomIndex, 1);
+            }
+            
+            // 保存中奖者
+            lotterySettings.winners = winners;
+            lotterySettings.drawStarted = false;
+            localStorage.setItem('lotterySettings', JSON.stringify(lotterySettings));
+            
+            // 显示中奖者
+            displayWinners();
+            
+            showMessage('抽奖完成！已产生中奖者。');
+        }
+        
+        // 显示中奖者
+        function displayWinners() {
+            winnersList.innerHTML = '';
+            
+            if (!lotterySettings.winners || lotterySettings.winners.length === 0) {
+                winnersList.innerHTML = '<div class="empty-message">暂无中奖者</div>';
+                return;
+            }
+            
+            winnersList.innerHTML = '<h3><i class="fas fa-crown"></i> 中奖名单</h3>';
+            
+            lotterySettings.winners.forEach((winner, index) => {
+                const winnerItem = document.createElement('div');
+                winnerItem.className = 'winner-item';
+                
+                let rankText = '';
+                if (index === 0) {
+                    rankText = '<i class="fas fa-crown" style="color: gold; margin-right: 8px;"></i> 一等奖';
+                } else if (index === 1) {
+                    rankText = '<i class="fas fa-medal" style="color: silver; margin-right: 8px;"></i> 二等奖';
+                } else if (index === 2) {
+                    rankText = '<i class="fas fa-medal" style="color: #cd7f32; margin-right: 8px;"></i> 三等奖';
+                } else {
+                    rankText = `<i class="fas fa-award" style="color: #4a00e0; margin-right: 8px;"></i> 幸运奖`;
+                }
+                
+                winnerItem.innerHTML = `${rankText}: ${winner}`;
+                winnersList.appendChild(winnerItem);
+            });
+        }
+        
+        // 立即开奖
+        function drawNow() {
+            if (lotterySettings.winners && lotterySettings.winners.length > 0) {
+                if (!confirm('已经抽过奖了，是否重新抽奖？')) {
+                    return;
+                }
+            }
+            
+            performDraw();
+        }
+        
+        // 重置抽奖
+        function resetDraw() {
+            if (!confirm('确定要重置抽奖吗？这将清除所有中奖记录和倒计时。')) {
+                return;
+            }
+            
+            lotterySettings.drawStarted = false;
+            lotterySettings.drawTime = null;
+            lotterySettings.winners = [];
+            
+            localStorage.setItem('lotterySettings', JSON.stringify(lotterySettings));
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            countdownTimer.textContent = "01:00:00";
+            winnersList.innerHTML = '';
+            
+            showMessage('抽奖已重置！');
+        }
+        
+        // 清空参与者列表
+        function clearAllParticipants() {
+            if (participants.length === 0) {
+                alert('参与者列表已经是空的！');
+                return;
+            }
+            
+            if (!confirm(`确定要清空所有参与者吗？当前有${participants.length}人。`)) {
+                return;
+            }
+            
+            participants = [];
+            saveParticipants();
+            updateParticipantList();
+            
+            showMessage('参与者列表已清空！');
+        }
+        
+        // 随机生成参与者
+        function addRandomParticipants() {
+            const randomNames = [
+                "张三", "李四", "王五", "赵六", "钱七", "孙八", "周九", "吴十", 
+                "刘明", "陈华", "杨光", "黄伟", "林静", "徐强", "马超", "朱莉",
+                "胡军", "郭芳", "何平", "高飞", "郑洁", "谢娜", "宋佳", "董明",
+                "梁超", "杜威", "程龙", "彭宇", "潘婷", "蒋欣", "蔡琴", "余华"
+            ];
+            
+            // 随机选择10个不重复的名字
+            const availableNames = [...randomNames];
+            const selectedNames = [];
+            
+            for (let i = 0; i < 10; i++) {
+                if (availableNames.length === 0) break;
+                
+                const randomIndex = Math.floor(Math.random() * availableNames.length);
+                const name = availableNames[randomIndex];
+                
+                // 避免重复添加
+                if (!participants.includes(name) && !selectedNames.includes(name)) {
+                    selectedNames.push(name);
+                }
+                
+                availableNames.splice(randomIndex, 1);
+            }
+            
+            // 添加到参与者列表
+            participants.push(...selectedNames);
+            saveParticipants();
+            updateParticipantList();
+            
+            showMessage(`已随机添加 ${selectedNames.length} 名参与者！`);
+        }
+        
+        // 导出参与者名单
+        function exportParticipants() {
+            if (participants.length === 0) {
+                alert('没有参与者可以导出！');
+                return;
+            }
+            
+            const text = participants.join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '抽奖参与者名单.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('参与者名单已导出为文件！');
+        }
+        
+        // 分享到QQ
+        function shareToQQ() {
+            const prizeName = encodeURIComponent(lotterySettings.prizeName);
+            const participantCount = participants.length;
+            const winnerCount = lotterySettings.winnerCount;
+            
+            // 创建分享文本
+            const shareText = `【群抽奖活动】\n奖品：${lotterySettings.prizeName}\n参与人数：${participantCount}人\n中奖名额：${winnerCount}个\n倒计时：${lotterySettings.timerHours}小时\n\n快来参与吧！`;
+            
+            // QQ分享链接格式
+            const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent('群抽奖活动')}&summary=${encodeURIComponent(shareText)}`;
+            
+            window.open(qqShareUrl, '_blank', 'width=600,height=400');
+        }
+        
+        // 复制抽奖链接
+        function copyLotteryLink() {
+            const link = window.location.href;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                showMessage('抽奖链接已复制到剪贴板！');
+            }).catch(err => {
+                // 如果clipboard API不可用，使用传统方法
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showMessage('抽奖链接已复制到剪贴板！');
+            });
+        }
+        
+        // 显示消息提示
+        function showMessage(message) {
+            // 创建消息元素
+            const messageEl = document.createElement('div');
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4a00e0;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            `;
+            
+            messageEl.textContent = message;
+            document.body.appendChild(messageEl);
+            
+            // 3秒后移除消息
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 3000);
+        }
+        
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 事件监听
+        document.getElementById('addParticipant').addEventListener('click', addParticipant);
+        document.getElementById('participantName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addParticipant();
+        });
+        
+        document.getElementById('saveSettings').addEventListener('click', saveSettings);
+        document.getElementById('startDraw').addEventListener('click', startDraw);
+        document.getElementById('drawNow').addEventListener('click', drawNow);
+        document.getElementById('resetDraw').addEventListener('click', resetDraw);
+        document.getElementById('clearAll').addEventListener('click', clearAllParticipants);
+        document.getElementById('addRandomParticipants').addEventListener('click', addRandomParticipants);
+        document.getElementById('exportList').addEventListener('click', exportParticipants);
+        document.getElementById('shareQQ').addEventListener('click', shareToQQ);
+        document.getElementById('copyLink').addEventListener('click', copyLotteryLink);
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
