@@ -1568,8 +1568,8 @@
             const adminClose = document.getElementById('adminClose');
             
             adminBtn.addEventListener('click', function() {
-                const password = prompt('请输入管理员密码（默认：it5270）');
-                if (password === 'admin123') {
+                const password = prompt('请输入管理员密码（默认：12345）');
+                if (password === 'it5270') {
                     adminOverlay.style.display = 'block';
                     lottery.updateAdminUI();
                 } else {
@@ -1614,3 +1614,4 @@
 </body>
 
 </html>
+
