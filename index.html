@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QQ游戏抽奖</title>
+    <title>2025年度游戏抽奖系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,46 +14,54 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             padding: 20px;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.97);
             border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
             overflow: hidden;
         }
         
         header {
-            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
             color: white;
-            padding: 25px;
+            padding: 30px;
             text-align: center;
             position: relative;
         }
         
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ffd700;
         }
         
         .subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .mode-indicator {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
             margin-top: 10px;
+            font-weight: 600;
         }
         
         .admin-mode {
@@ -61,61 +69,20 @@
         }
         
         .main-content {
-            padding: 30px;
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .tab {
-            padding: 15px 30px;
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .tab.active {
-            color: #4a00e0;
-        }
-        
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #4a00e0;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        .tab-content.active {
-            display: block;
+            padding: 25px;
         }
         
         .panel {
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
             border: 1px solid #eee;
         }
         
         h2 {
-            color: #4a00e0;
+            color: #6a11cb;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #f0f0f0;
@@ -148,18 +115,20 @@
         }
         
         input:focus, textarea:focus, select:focus {
-            border-color: #4a00e0;
+            border-color: #6a11cb;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
+            line-height: 1.6;
         }
         
         .btn {
             display: inline-block;
-            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -173,7 +142,7 @@
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(142, 45, 226, 0.3);
+            box-shadow: 0 7px 14px rgba(106, 17, 203, 0.3);
         }
         
         .btn i {
@@ -213,6 +182,11 @@
             padding: 12px 15px;
             background-color: #f9f9f9;
             border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        .participant-item:hover {
+            background-color: #f0f0f0;
         }
         
         .participant-item:last-child {
@@ -221,11 +195,13 @@
         
         .participant-name {
             font-weight: 600;
+            color: #333;
         }
         
         .participant-time {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #888;
+            margin-top: 3px;
         }
         
         .participant-actions button {
@@ -236,45 +212,80 @@
             font-size: 2.8rem;
             font-weight: bold;
             text-align: center;
-            color: #4a00e0;
-            margin: 20px 0;
+            color: #6a11cb;
+            margin: 25px 0;
             font-family: 'Courier New', monospace;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         .prize-display {
-            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            margin: 20px 0;
-            border: 2px dashed #8e2de2;
+            margin: 25px 0;
+            border: 3px solid #6a11cb;
+            color: white;
         }
         
         .prize-title {
-            font-size: 1.8rem;
-            color: #4a00e0;
+            font-size: 2rem;
+            color: #ffd700;
             margin-bottom: 15px;
+            font-weight: 700;
         }
         
         .prize-description {
-            color: #666;
-            line-height: 1.6;
+            color: #e0e0e0;
+            line-height: 1.7;
             font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .game-examples {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .game-examples h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .game-tag {
+            background: rgba(106, 17, 203, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
         
         .winners-list {
-            margin-top: 20px;
+            margin-top: 25px;
         }
         
         .winner-item {
-            padding: 15px;
-            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
-            border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 18px;
+            background: linear-gradient(to right, #ffd700, #ffed4e);
+            border-radius: 12px;
+            margin-bottom: 12px;
             text-align: center;
-            font-weight: 600;
-            color: #d45a00;
-            font-size: 1.2rem;
+            font-weight: 700;
+            color: #8b6b00;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .join-section {
@@ -288,7 +299,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
         
         .join-input-group {
@@ -301,11 +312,13 @@
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
             border-right: none;
+            font-size: 1.1rem;
         }
         
         .join-btn {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
+            font-size: 1.1rem;
         }
         
         .empty-message {
@@ -317,7 +330,7 @@
         
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin: 20px 0;
         }
@@ -330,35 +343,15 @@
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #4a00e0;
+            color: #6a11cb;
         }
         
         .stat-label {
             font-size: 0.9rem;
             color: #666;
             margin-top: 5px;
-        }
-        
-        .share-section {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
-        .share-btn {
-            background-color: #12b7f5;
-            margin: 5px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .share-btn i {
-            margin-right: 10px;
-            font-size: 1.2rem;
         }
         
         .admin-only {
@@ -388,6 +381,39 @@
             margin: 10px auto;
         }
         
+        .sync-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .sync-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .sync-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6a11cb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -406,13 +432,22 @@
                 font-size: 2.2rem;
             }
             
-            .tabs {
+            .prize-title {
+                font-size: 1.6rem;
+            }
+            
+            .join-input-group {
                 flex-direction: column;
             }
             
-            .tab {
-                padding: 12px;
-                text-align: center;
+            .join-input {
+                border-radius: 8px;
+                border: 2px solid #ddd;
+                margin-bottom: 10px;
+            }
+            
+            .join-btn {
+                border-radius: 8px;
             }
         }
     </style>
@@ -420,8 +455,11 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-gift"></i> 公开抽奖系统</h1>
-            <p class="subtitle">没有内幕 | 定时开奖 | 公平透明</p>
+            <div class="game-icon">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <h1>2025年度游戏抽奖</h1>
+            <p class="subtitle">云端数据同步 | 公平透明 | 实时参与</p>
             <div class="mode-indicator" id="modeIndicator">参与者模式</div>
         </header>
         
@@ -430,9 +468,20 @@
             <div class="tab-content active" id="participantView">
                 <div class="panel">
                     <div class="prize-display">
-                        <div class="prize-title" id="viewPrizeName">2025年度游戏</div>
+                        <div class="prize-title" id="viewPrizeName">2025年度游戏抽奖</div>
                         <div class="prize-description" id="viewPrizeDescription">
-                            中奖后请联系仙子鹿领取最高价值160元的单机游戏，譬如：天国拯救2，双影奇镜，33号远征队等等！
+                            中奖后请联系仙子鹿领取最高价值160元的单机游戏！
+                        </div>
+                        
+                        <div class="game-examples">
+                            <h4>🎮 可选游戏示例：</h4>
+                            <div class="game-list">
+                                <span class="game-tag">天国拯救2</span>
+                                <span class="game-tag">双影奇镜</span>
+                                <span class="game-tag">33号远征队</span>
+                                <span class="game-tag">星海奇航</span>
+                                <span class="game-tag">时光旅者</span>
+                            </div>
                         </div>
                     </div>
                     
@@ -442,7 +491,7 @@
                             <div class="stat-label">已参与人数</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-value" id="viewWinnerCount">3</div>
+                            <div class="stat-value" id="viewWinnerCount">1</div>
                             <div class="stat-label">中奖名额</div>
                         </div>
                         <div class="stat-box">
@@ -475,145 +524,158 @@
                     </div>
                 </div>
                 
-                <div class="share-section">
-                    <h3><i class="fas fa-share-alt"></i> 分享给好友</h3>
-                    <p style="margin-bottom: 15px;">复制下方链接，邀请好友一起参与抽奖！</p>
-                    
-                    <div style="background: #f5f5f5; padding: 10px; border-radius: 8px; margin-bottom: 15px; word-break: break-all;">
-                        <span id="shareLinkText">正在加载链接...</span>
-                    </div>
-                    
-                    <button class="btn share-btn" id="copyShareLink">
-                        <i class="fas fa-copy"></i> 复制参与链接
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-secondary btn-small" id="refreshDataBtn">
+                        <i class="fas fa-sync-alt"></i> 刷新数据
                     </button>
-                    <button class="btn share-btn" id="shareQQ">
-                        <i class="fab fa-qq"></i> 分享到QQ
-                    </button>
+                    <span id="lastUpdateTime" style="margin-left: 10px; font-size: 0.85rem; color: #666;"></span>
                 </div>
             </div>
             
             <!-- 管理员视图 -->
             <div class="tab-content" id="adminView">
-                <div class="tabs">
-                    <button class="tab active" data-tab="adminSettings"><i class="fas fa-cog"></i> 抽奖设置</button>
-                    <button class="tab" data-tab="adminParticipants"><i class="fas fa-users"></i> 参与者管理</button>
-                    <button class="tab" data-tab="adminResults"><i class="fas fa-trophy"></i> 开奖结果</button>
+                <div class="panel admin-only">
+                    <h2><i class="fas fa-cog"></i> 抽奖设置</h2>
+                    
+                    <div class="form-group">
+                        <label for="adminPrizeName"><i class="fas fa-trophy"></i> 奖品名称</label>
+                        <input type="text" id="adminPrizeName" value="2025年度游戏抽奖">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminPrizeDescription"><i class="fas fa-file-alt"></i> 奖品描述</label>
+                        <textarea id="adminPrizeDescription">中奖后请联系仙子鹿领取最高价值160元的单机游戏！</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminWinnerCount"><i class="fas fa-users"></i> 中奖人数</label>
+                        <input type="number" id="adminWinnerCount" min="1" max="10" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminTimerHours"><i class="fas fa-clock"></i> 开奖倒计时（小时）</label>
+                        <input type="number" id="adminTimerHours" min="0" max="240" step="0.1" value="1">
+                        <small style="color: #666; display: block; margin-top: 5px;">设置为0表示手动开奖，不会自动开奖</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminMaxParticipants"><i class="fas fa-user-friends"></i> 最大参与人数（0表示不限）</label>
+                        <input type="number" id="adminMaxParticipants" min="0" max="1000" value="10">
+                    </div>
+                    
+                    <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-block" id="saveAdminSettings">
+                            <i class="fas fa-save"></i> 保存设置
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- 管理员设置 -->
-                <div class="tab-content admin-only active" id="adminSettings">
-                    <div class="panel">
-                        <h2><i class="fas fa-cog"></i> 抽奖设置</h2>
-                        
-                        <div class="form-group">
-                            <label for="adminPrizeName"><i class="fas fa-trophy"></i> 奖品名称</label>
-                            <input type="text" id="adminPrizeName" placeholder="例如：50元红包、游戏皮肤、自定义奖品...">
+                <div class="panel admin-only">
+                    <h2><i class="fas fa-play-circle"></i> 抽奖控制</h2>
+                    
+                    <div class="timer" id="adminCountdownTimer">
+                        01:00:00
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="font-size: 1.2rem; color: #6a11cb; margin-bottom: 10px;">
+                            抽奖状态: <span id="drawStatusText">未开始</span>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="adminPrizeDescription"><i class="fas fa-file-alt"></i> 奖品描述</label>
-                            <textarea id="adminPrizeDescription" placeholder="请详细描述奖品内容、使用规则等信息..."></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="adminWinnerCount"><i class="fas fa-users"></i> 中奖人数</label>
-                            <input type="number" id="adminWinnerCount" min="1" max="100" value="3">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="adminTimerHours"><i class="fas fa-clock"></i> 开奖倒计时（小时）</label>
-                            <input type="number" id="adminTimerHours" min="0.1" max="240" step="0.1" value="1">
-                            <small style="color: #666; display: block; margin-top: 5px;">设置为0表示手动开奖，不会自动开奖</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="adminMaxParticipants"><i class="fas fa-user-friends"></i> 最大参与人数（0表示不限）</label>
-                            <input type="number" id="adminMaxParticipants" min="0" max="10000" value="0">
-                        </div>
-                        
-                        <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button class="btn btn-block" id="saveAdminSettings">
-                                <i class="fas fa-save"></i> 保存设置
-                            </button>
+                        <div style="color: #666;">
+                            参与者: <span id="adminParticipantCount">0</span> 人 | 
+                            中奖名额: <span id="adminWinnerCountText">1</span> 人
                         </div>
                     </div>
                     
-                    <div class="panel admin-only">
-                        <h2><i class="fas fa-play-circle"></i> 抽奖控制</h2>
-                        
-                        <div class="timer" id="adminCountdownTimer">
-                            01:00:00
-                        </div>
-                        
-                        <div style="text-align: center; margin: 20px 0;">
-                            <div style="font-size: 1.2rem; color: #4a00e0; margin-bottom: 10px;">
-                                抽奖状态: <span id="drawStatusText">未开始</span>
-                            </div>
-                            <div style="color: #666;">
-                                参与者: <span id="adminParticipantCount">0</span> 人 | 
-                                中奖名额: <span id="adminWinnerCountText">3</span> 人
-                            </div>
-                        </div>
-                        
-                        <div class="action-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <button class="btn btn-secondary" id="startDrawBtn">
-                                <i class="fas fa-play"></i> 开始抽奖
-                            </button>
-                            <button class="btn" id="drawNowBtn">
-                                <i class="fas fa-bolt"></i> 立即开奖
-                            </button>
-                            <button class="btn btn-danger" id="resetDrawBtn">
-                                <i class="fas fa-redo"></i> 重置抽奖
-                            </button>
-                            <button class="btn" id="exportDataBtn">
-                                <i class="fas fa-download"></i> 导出数据
-                            </button>
-                        </div>
+                    <div class="action-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button class="btn btn-secondary" id="startDrawBtn">
+                            <i class="fas fa-play"></i> 开始抽奖
+                        </button>
+                        <button class="btn" id="drawNowBtn">
+                            <i class="fas fa-bolt"></i> 立即开奖
+                        </button>
+                        <button class="btn btn-danger" id="resetDrawBtn">
+                            <i class="fas fa-redo"></i> 重置抽奖
+                        </button>
                     </div>
                 </div>
                 
-                <!-- 参与者管理 -->
-                <div class="tab-content admin-only" id="adminParticipants">
-                    <div class="panel admin-only">
-                        <h2><i class="fas fa-users"></i> 参与者列表 <span id="adminParticipantCountText">(0人)</span></h2>
-                        
-                        <div class="participant-list" id="adminParticipantList">
-                            <div class="empty-message">
-                                暂无参与者
-                            </div>
+                <div class="panel admin-only">
+                    <h2><i class="fas fa-users"></i> 参与者管理 <span id="adminParticipantCountText">(0人)</span></h2>
+                    
+                    <div class="participant-list" id="adminParticipantList">
+                        <div class="empty-message">
+                            暂无参与者
                         </div>
-                        
-                        <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button class="btn btn-danger" id="clearParticipantsBtn">
-                                <i class="fas fa-trash"></i> 清空参与者
-                            </button>
-                            <button class="btn" id="exportParticipantsBtn">
-                                <i class="fas fa-file-export"></i> 导出名单
-                            </button>
-                            <button class="btn btn-secondary" id="addTestParticipantsBtn">
-                                <i class="fas fa-plus"></i> 添加测试数据
-                            </button>
-                        </div>
+                    </div>
+                    
+                    <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-danger" id="clearParticipantsBtn">
+                            <i class="fas fa-trash"></i> 清空参与者
+                        </button>
+                        <button class="btn" id="exportParticipantsBtn">
+                            <i class="fas fa-file-export"></i> 导出名单
+                        </button>
                     </div>
                 </div>
                 
-                <!-- 开奖结果 -->
-                <div class="tab-content admin-only" id="adminResults">
-                    <div class="panel admin-only">
-                        <h2><i class="fas fa-trophy"></i> 中奖结果</h2>
-                        
-                        <div class="winners-list" id="adminWinnersList">
-                            <div class="empty-message">
-                                尚未开奖
-                            </div>
+                <div class="panel admin-only">
+                    <h2><i class="fas fa-trophy"></i> 中奖结果</h2>
+                    
+                    <div class="winners-list" id="adminWinnersList">
+                        <div class="empty-message">
+                            尚未开奖
                         </div>
-                        
-                        <div style="margin-top: 20px;">
-                            <button class="btn btn-block" id="announceWinnersBtn">
-                                <i class="fas fa-bullhorn"></i> 公布中奖结果
-                            </button>
-                            <small style="color: #666; display: block; margin-top: 10px;">公布后，参与者将能看到中奖名单</small>
-                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-block" id="announceWinnersBtn">
+                            <i class="fas fa-bullhorn"></i> 公布中奖结果
+                        </button>
+                        <small style="color: #666; display: block; margin-top: 10px;">公布后，参与者将能看到中奖名单</small>
+                    </div>
+                </div>
+                
+                <div class="panel admin-only">
+                    <h2><i class="fas fa-tools"></i> 云端配置</h2>
+                    
+                    <div class="form-group">
+                        <label for="gistIdInput"><i class="fab fa-github"></i> Gist ID</label>
+                        <input type="text" id="gistIdInput" placeholder="请输入Gist ID">
+                        <small style="color: #666; display: block; margin-top: 5px;">用于存储数据的GitHub Gist ID</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="githubTokenInput"><i class="fas fa-key"></i> GitHub Token</label>
+                        <input type="password" id="githubTokenInput" placeholder="请输入GitHub Token">
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            需要gist权限的GitHub个人访问令牌<br>
+                            <a href="https://github.com/settings/tokens" target="_blank" style="color: #6a11cb;">如何创建Token？</a>
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="syncIntervalInput"><i class="fas fa-sync-alt"></i> 数据同步间隔（秒）</label>
+                        <input type="number" id="syncIntervalInput" min="5" max="300" value="10">
+                    </div>
+                    
+                    <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-block" id="saveConfigBtn">
+                            <i class="fas fa-save"></i> 保存配置
+                        </button>
+                        <button class="btn btn-block btn-secondary" id="testConnectionBtn">
+                            <i class="fas fa-plug"></i> 测试连接
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                        <h3><i class="fas fa-info-circle"></i> 配置说明</h3>
+                        <ol style="margin-left: 20px; margin-top: 10px; color: #666; font-size: 0.9rem;">
+                            <li>创建GitHub个人访问令牌（需要gist权限）</li>
+                            <li>创建Gist并获取Gist ID</li>
+                            <li>填入Gist ID和Token</li>
+                            <li>保存配置，系统将开始同步数据</li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -632,77 +694,66 @@
         </div>
         
         <footer>
-            <p>公开抽奖系统 &copy; 2023 | 部署到GitHub Pages | 数据保存在浏览器本地</p>
-            <p>参与者只能查看和参与，不能修改任何设置</p>
+            <p>2025年度游戏抽奖系统 &copy; 2025 | 使用GitHub Gist云端存储 | 数据实时同步</p>
+            <p id="syncStatusText">正在连接云端数据...</p>
         </footer>
     </div>
 
     <script>
-        // 抽奖数据管理
-        class LotteryManager {
+        // 配置常量
+        const DEFAULT_CONFIG = {
+            gistId: "", // 需要您填写的Gist ID
+            githubToken: "", // 需要您填写的GitHub Token
+            syncInterval: 10, // 数据同步间隔（秒）
+            adminKey: "admin123", // 管理员密码
+            lastSync: 0
+        };
+        
+        // 默认数据
+        const DEFAULT_DATA = {
+            prizeName: "2025年度游戏抽奖",
+            prizeDescription: "中奖后请联系仙子鹿领取最高价值160元的单机游戏！",
+            winnerCount: 1, // 默认1名中奖者
+            timerHours: 1,
+            maxParticipants: 10, // 默认最多10人参与
+            drawStarted: false,
+            drawTime: null,
+            winners: [],
+            winnersAnnounced: false,
+            participants: [],
+            lastUpdated: new Date().toISOString()
+        };
+        
+        // 抽奖管理器
+        class GameLotteryManager {
             constructor() {
-                this.storageKey = 'lotterySystemData';
-                this.adminKey = 'admin123'; // 默认管理员密钥，可以修改
+                this.config = {...DEFAULT_CONFIG};
+                this.data = null;
                 this.isAdmin = false;
+                this.isLoading = false;
+                this.syncInterval = null;
                 this.countdownInterval = null;
-                
-                // 默认数据
-                this.defaultData = {
-                    // 抽奖设置
-                    prizeName: '50元现金红包',
-                    prizeDescription: '恭喜中奖！中奖后请联系管理员领取50元现金红包，有效期30天。',
-                    winnerCount: 3,
-                    timerHours: 1,
-                    maxParticipants: 0, // 0表示不限
-                    
-                    // 抽奖状态
-                    drawStarted: false,
-                    drawTime: null,
-                    winners: [],
-                    winnersAnnounced: false,
-                    
-                    // 参与者
-                    participants: [],
-                    participantIds: new Set(), // 用于快速查重
-                    
-                    // 系统设置
-                    adminKey: 'admin123' // 管理员密钥
-                };
-                
-                this.loadData();
+                this.loadConfig();
             }
             
-            // 加载数据
-            loadData() {
-                const savedData = localStorage.getItem(this.storageKey);
-                if (savedData) {
+            // 加载配置
+            loadConfig() {
+                const savedConfig = localStorage.getItem('gameLotteryConfig');
+                if (savedConfig) {
                     try {
-                        const parsed = JSON.parse(savedData);
-                        this.data = {...this.defaultData, ...parsed};
-                        
-                        // 恢复participantIds Set
-                        this.data.participantIds = new Set(this.data.participants.map(p => p.id));
+                        this.config = {...this.config, ...JSON.parse(savedConfig)};
                     } catch (e) {
-                        console.error('加载数据失败，使用默认数据', e);
-                        this.data = {...this.defaultData};
-                        this.data.participantIds = new Set();
+                        console.error('加载配置失败', e);
                     }
-                } else {
-                    this.data = {...this.defaultData};
-                    this.data.participantIds = new Set();
                 }
                 
-                // 检查URL参数，判断是否为管理员
+                // 检查URL中的管理员参数
                 this.checkAdminFromURL();
             }
             
-            // 保存数据
-            saveData() {
-                // 转换Set为数组以便保存
-                const dataToSave = {...this.data};
-                dataToSave.participantIds = Array.from(dataToSave.participantIds);
-                
-                localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+            // 保存配置
+            saveConfig() {
+                localStorage.setItem('gameLotteryConfig', JSON.stringify(this.config));
             }
             
             // 检查URL中的管理员参数
@@ -710,9 +761,11 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const adminKey = urlParams.get('admin');
                 
-                if (adminKey && adminKey === this.data.adminKey) {
+                if (adminKey && adminKey === this.config.adminKey) {
                     this.isAdmin = true;
                     this.showAdminView();
+                } else {
+                    this.showParticipantView();
                 }
             }
             
@@ -720,96 +773,192 @@
             showAdminView() {
                 document.getElementById('modeIndicator').textContent = '管理员模式';
                 document.getElementById('modeIndicator').classList.add('admin-mode');
-                
-                // 切换到管理员视图
                 document.getElementById('participantView').classList.remove('active');
                 document.getElementById('adminView').classList.add('active');
-                
-                // 初始化管理员界面数据
-                this.initAdminView();
-                
-                // 隐藏管理员入口
                 document.getElementById('adminAccessSection').style.display = 'none';
+                
+                // 初始化管理员配置
+                document.getElementById('gistIdInput').value = this.config.gistId || '';
+                document.getElementById('githubTokenInput').value = this.config.githubToken || '';
+                document.getElementById('syncIntervalInput').value = this.config.syncInterval;
+                
+                // 加载数据
+                this.loadData();
             }
             
             // 显示参与者视图
             showParticipantView() {
                 document.getElementById('modeIndicator').textContent = '参与者模式';
                 document.getElementById('modeIndicator').classList.remove('admin-mode');
-                
-                // 切换到参与者视图
                 document.getElementById('participantView').classList.add('active');
                 document.getElementById('adminView').classList.remove('active');
+                document.getElementById('adminAccessSection').style.display = 'block';
                 
-                // 初始化参与者界面数据
-                this.initParticipantView();
+                // 加载数据
+                this.loadData();
             }
             
-            // 初始化参与者视图
-            initParticipantView() {
-                // 更新奖品信息
+            // 加载数据
+            async loadData() {
+                if (this.isLoading) return;
+                
+                this.isLoading = true;
+                this.updateSyncStatus('正在同步数据...');
+                
+                try {
+                    // 检查是否有配置
+                    if (!this.config.gistId || !this.config.githubToken) {
+                        if (this.isAdmin) {
+                            this.showMessage('请先配置Gist ID和GitHub Token', 'error');
+                        }
+                        this.updateSyncStatus('未配置云端存储', 'error');
+                        this.isLoading = false;
+                        return;
+                    }
+                    
+                    // 从Gist加载数据
+                    const response = await fetch(`https://api.github.com/gists/${this.config.gistId}`, {
+                        headers: {
+                            'Authorization': `token ${this.config.githubToken}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const gistData = await response.json();
+                    const fileContent = gistData.files['lottery_data.json'].content;
+                    this.data = JSON.parse(fileContent);
+                    
+                    // 更新最后同步时间
+                    this.config.lastSync = Date.now();
+                    this.saveConfig();
+                    
+                    // 更新界面
+                    this.updateUI();
+                    this.updateSyncStatus('数据同步成功 ' + new Date().toLocaleTimeString('zh-CN'), 'success');
+                    
+                    // 开始自动同步
+                    this.startAutoSync();
+                    
+                } catch (error) {
+                    console.error('加载数据失败:', error);
+                    this.updateSyncStatus('数据同步失败: ' + error.message, 'error');
+                    
+                    // 如果是管理员，显示错误详情
+                    if (this.isAdmin) {
+                        this.showMessage(`数据加载失败: ${error.message}`, 'error');
+                    }
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+            
+            // 保存数据到Gist
+            async saveData() {
+                if (!this.data || !this.config.gistId || !this.config.githubToken) {
+                    return false;
+                }
+                
+                try {
+                    // 更新最后修改时间
+                    this.data.lastUpdated = new Date().toISOString();
+                    
+                    const response = await fetch(`https://api.github.com/gists/${this.config.gistId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `token ${this.config.githubToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            description: "游戏抽奖系统数据 - 最后更新: " + new Date().toLocaleString('zh-CN'),
+                            files: {
+                                "lottery_data.json": {
+                                    content: JSON.stringify(this.data, null, 2)
+                                }
+                            }
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    // 更新最后同步时间
+                    this.config.lastSync = Date.now();
+                    this.saveConfig();
+                    
+                    this.updateSyncStatus('数据保存成功 ' + new Date().toLocaleTimeString('zh-CN'), 'success');
+                    return true;
+                } catch (error) {
+                    console.error('保存数据失败:', error);
+                    this.updateSyncStatus('保存失败: ' + error.message, 'error');
+                    return false;
+                }
+            }
+            
+            // 开始自动同步
+            startAutoSync() {
+                if (this.syncInterval) {
+                    clearInterval(this.syncInterval);
+                }
+                
+                this.syncInterval = setInterval(() => {
+                    this.loadData();
+                }, this.config.syncInterval * 1000);
+            }
+            
+            // 更新界面
+            updateUI() {
+                if (!this.data) return;
+                
+                // 更新参与者视图
                 document.getElementById('viewPrizeName').textContent = this.data.prizeName;
                 document.getElementById('viewPrizeDescription').textContent = this.data.prizeDescription;
-                
-                // 更新统计信息
                 document.getElementById('viewParticipantCount').textContent = this.data.participants.length;
                 document.getElementById('viewWinnerCount').textContent = this.data.winnerCount;
                 
                 // 更新倒计时
-                this.updateParticipantCountdown();
+                this.updateCountdown();
                 
-                // 更新中奖者列表
+                // 更新中奖者显示
                 this.updateWinnersDisplay();
                 
-                // 更新分享链接
-                this.updateShareLink();
+                // 更新最后更新时间
+                const lastUpdate = new Date(this.data.lastUpdated);
+                document.getElementById('lastUpdateTime').textContent = '最后更新: ' + lastUpdate.toLocaleTimeString('zh-CN');
                 
-                // 如果抽奖已经开始，启动倒计时
-                if (this.data.drawStarted && this.data.drawTime) {
-                    this.startCountdown();
+                // 如果是管理员，更新管理员视图
+                if (this.isAdmin) {
+                    document.getElementById('adminPrizeName').value = this.data.prizeName;
+                    document.getElementById('adminPrizeDescription').value = this.data.prizeDescription;
+                    document.getElementById('adminWinnerCount').value = this.data.winnerCount;
+                    document.getElementById('adminTimerHours').value = this.data.timerHours;
+                    document.getElementById('adminMaxParticipants').value = this.data.maxParticipants;
+                    
+                    document.getElementById('adminParticipantCount').textContent = this.data.participants.length;
+                    document.getElementById('adminParticipantCountText').textContent = `(${this.data.participants.length}人)`;
+                    document.getElementById('adminWinnerCountText').textContent = this.data.winnerCount;
+                    
+                    document.getElementById('drawStatusText').textContent = this.data.drawStarted ? '进行中' : '未开始';
+                    
+                    this.updateAdminCountdown();
+                    this.updateAdminParticipantList();
+                    this.updateAdminWinnersList();
                 }
             }
             
-            // 初始化管理员视图
-            initAdminView() {
-                // 填充设置表单
-                document.getElementById('adminPrizeName').value = this.data.prizeName;
-                document.getElementById('adminPrizeDescription').value = this.data.prizeDescription;
-                document.getElementById('adminWinnerCount').value = this.data.winnerCount;
-                document.getElementById('adminTimerHours').value = this.data.timerHours;
-                document.getElementById('adminMaxParticipants').value = this.data.maxParticipants;
-                
-                // 更新统计信息
-                document.getElementById('adminParticipantCount').textContent = this.data.participants.length;
-                document.getElementById('adminParticipantCountText').textContent = `(${this.data.participants.length}人)`;
-                document.getElementById('adminWinnerCountText').textContent = this.data.winnerCount;
-                
-                // 更新抽奖状态
-                document.getElementById('drawStatusText').textContent = this.data.drawStarted ? '进行中' : '未开始';
-                
-                // 更新倒计时
-                this.updateAdminCountdown();
-                
-                // 更新参与者列表
-                this.updateAdminParticipantList();
-                
-                // 更新中奖者列表
-                this.updateAdminWinnersList();
-                
-                // 如果抽奖已经开始，启动倒计时
-                if (this.data.drawStarted && this.data.drawTime) {
-                    this.startCountdown();
-                }
-            }
-            
-            // 更新参与者倒计时显示
-            updateParticipantCountdown() {
-                const timeLeftElement = document.getElementById('viewTimeLeft');
+            // 更新倒计时
+            updateCountdown() {
                 const timerElement = document.getElementById('viewCountdownTimer');
+                const timeLeftElement = document.getElementById('viewTimeLeft');
                 
                 if (!this.data.drawStarted || !this.data.drawTime) {
-                    timeLeftElement.textContent = '待开始';
                     timerElement.textContent = '00:00:00';
+                    timeLeftElement.textContent = '待开始';
                     return;
                 }
                 
@@ -818,8 +967,8 @@
                 const timeLeft = drawTime - now;
                 
                 if (timeLeft <= 0) {
-                    timeLeftElement.textContent = '已开奖';
                     timerElement.textContent = '00:00:00';
+                    timeLeftElement.textContent = '已开奖';
                     
                     // 自动开奖
                     if (!this.data.winners || this.data.winners.length === 0) {
@@ -835,12 +984,17 @@
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 
                 // 更新显示
-                timeLeftElement.textContent = `${hours}小时${minutes}分钟`;
                 timerElement.textContent = 
                     `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timeLeftElement.textContent = `${hours}小时${minutes}分钟`;
+                
+                // 如果抽奖已开始，启动倒计时
+                if (this.data.drawStarted && this.data.drawTime && !this.countdownInterval) {
+                    this.startCountdown();
+                }
             }
             
-            // 更新管理员倒计时显示
+            // 更新管理员倒计时
             updateAdminCountdown() {
                 const timerElement = document.getElementById('adminCountdownTimer');
                 
@@ -858,12 +1012,10 @@
                     return;
                 }
                 
-                // 计算剩余时间
                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 
-                // 更新显示
                 timerElement.textContent = 
                     `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
@@ -875,10 +1027,9 @@
                 }
                 
                 this.countdownInterval = setInterval(() => {
-                    this.updateParticipantCountdown();
+                    this.updateCountdown();
                     this.updateAdminCountdown();
                     
-                    // 检查是否到了开奖时间
                     if (this.data.drawStarted && this.data.drawTime) {
                         const now = new Date().getTime();
                         if (now >= this.data.drawTime) {
@@ -890,7 +1041,7 @@
             }
             
             // 添加参与者
-            addParticipant(name) {
+            async addParticipant(name) {
                 // 验证输入
                 if (!name || name.trim() === '') {
                     return {success: false, message: '请输入昵称'};
@@ -900,7 +1051,8 @@
                 
                 // 检查是否已参与
                 const participantId = this.generateParticipantId(name);
-                if (this.data.participantIds.has(participantId)) {
+                const alreadyParticipated = this.data.participants.some(p => p.id === participantId);
+                if (alreadyParticipated) {
                     return {success: false, message: '您已经参与过抽奖了'};
                 }
                 
@@ -922,118 +1074,47 @@
                 };
                 
                 this.data.participants.push(participant);
-                this.data.participantIds.add(participantId);
                 
                 // 保存数据
-                this.saveData();
+                const saved = await this.saveData();
+                if (!saved) {
+                    return {success: false, message: '保存数据失败，请稍后重试'};
+                }
                 
                 // 更新显示
-                this.updateParticipantCount();
-                if (this.isAdmin) {
-                    this.updateAdminParticipantList();
-                }
+                this.updateUI();
                 
                 return {success: true, message: `成功参与抽奖！您是第${this.data.participants.length}位参与者`};
             }
             
-            // 生成参与者ID（基于名称和IP的简单哈希）
+            // 生成参与者ID
             generateParticipantId(name) {
-                // 使用简单的方法生成ID：名称 + 用户代理的一部分
-                const userAgent = navigator.userAgent;
-                const simpleHash = name + '_' + userAgent.length;
-                return simpleHash;
-            }
-            
-            // 更新参与者计数
-            updateParticipantCount() {
-                document.getElementById('viewParticipantCount').textContent = this.data.participants.length;
-                if (this.isAdmin) {
-                    document.getElementById('adminParticipantCount').textContent = this.data.participants.length;
-                    document.getElementById('adminParticipantCountText').textContent = `(${this.data.participants.length}人)`;
-                }
-            }
-            
-            // 更新参与者列表（管理员视图）
-            updateAdminParticipantList() {
-                const listElement = document.getElementById('adminParticipantList');
-                
-                if (this.data.participants.length === 0) {
-                    listElement.innerHTML = '<div class="empty-message">暂无参与者</div>';
-                    return;
-                }
-                
-                listElement.innerHTML = '';
-                
-                this.data.participants.forEach((participant, index) => {
-                    const participantItem = document.createElement('div');
-                    participantItem.className = 'participant-item';
-                    participantItem.innerHTML = `
-                        <div>
-                            <div class="participant-name">${participant.name}</div>
-                            <div class="participant-time">参与时间: ${participant.time}</div>
-                        </div>
-                        <div class="participant-actions">
-                            <button class="btn btn-small btn-danger delete-participant-btn" data-id="${participant.id}">
-                                <i class="fas fa-trash"></i> 删除
-                            </button>
-                        </div>
-                    `;
-                    
-                    listElement.appendChild(participantItem);
-                });
-                
-                // 添加删除按钮事件
-                document.querySelectorAll('.delete-participant-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const id = e.currentTarget.getAttribute('data-id');
-                        this.deleteParticipant(id);
-                    });
-                });
-            }
-            
-            // 删除参与者
-            deleteParticipant(id) {
-                if (!confirm('确定要删除此参与者吗？')) {
-                    return;
-                }
-                
-                // 从数组中删除
-                this.data.participants = this.data.participants.filter(p => p.id !== id);
-                
-                // 从Set中删除
-                this.data.participantIds.delete(id);
-                
-                // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                this.updateParticipantCount();
-                this.updateAdminParticipantList();
-                
-                this.showMessage('参与者已删除');
+                // 使用简单的方法生成ID：名称 + 时间戳 + 随机数
+                const timestamp = Date.now();
+                const random = Math.floor(Math.random() * 10000);
+                return `${name}_${timestamp}_${random}`;
             }
             
             // 清空参与者
-            clearParticipants() {
+            async clearParticipants() {
                 if (!confirm('确定要清空所有参与者吗？此操作不可撤销。')) {
                     return;
                 }
                 
                 this.data.participants = [];
-                this.data.participantIds.clear();
                 
                 // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                this.updateParticipantCount();
-                this.updateAdminParticipantList();
-                
-                this.showMessage('所有参与者已清空');
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage('所有参与者已清空');
+                    this.updateUI();
+                } else {
+                    this.showMessage('清空失败，请重试', 'error');
+                }
             }
             
             // 保存管理员设置
-            saveAdminSettings() {
+            async saveAdminSettings() {
                 // 验证输入
                 const prizeName = document.getElementById('adminPrizeName').value.trim();
                 const prizeDescription = document.getElementById('adminPrizeDescription').value.trim();
@@ -1059,17 +1140,15 @@
                 this.data.maxParticipants = maxParticipants;
                 
                 // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                this.initParticipantView();
-                this.initAdminView();
-                
-                this.showMessage('设置已保存');
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage('设置已保存');
+                    this.updateUI();
+                }
             }
             
             // 开始抽奖
-            startDraw() {
+            async startDraw() {
                 if (this.data.drawStarted) {
                     this.showMessage('抽奖已开始', 'error');
                     return;
@@ -1084,30 +1163,22 @@
                 this.data.drawStarted = true;
                 this.data.drawTime = this.data.timerHours > 0 
                     ? new Date().getTime() + (this.data.timerHours * 60 * 60 * 1000)
-                    : null; // 如果timerHours为0，表示手动开奖
+                    : null;
                 
                 // 清空中奖者
                 this.data.winners = [];
                 this.data.winnersAnnounced = false;
                 
                 // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                document.getElementById('drawStatusText').textContent = '进行中';
-                this.updateParticipantCountdown();
-                this.updateAdminCountdown();
-                
-                // 开始倒计时（如果设置了时间）
-                if (this.data.timerHours > 0) {
-                    this.startCountdown();
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage(`抽奖已开始！${this.data.timerHours > 0 ? `将在${this.data.timerHours}小时后自动开奖` : '请手动开奖'}`);
+                    this.updateUI();
                 }
-                
-                this.showMessage(`抽奖已开始！${this.data.timerHours > 0 ? `将在${this.data.timerHours}小时后自动开奖` : '请手动开奖'}`);
             }
             
             // 执行抽奖
-            performDraw() {
+            async performDraw() {
                 if (this.data.winners && this.data.winners.length > 0) {
                     // 已经抽过奖了
                     this.updateWinnersDisplay();
@@ -1138,18 +1209,15 @@
                 this.data.drawStarted = false;
                 
                 // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                document.getElementById('drawStatusText').textContent = '已开奖';
-                this.updateWinnersDisplay();
-                this.updateAdminWinnersList();
-                
-                this.showMessage('抽奖完成！已产生中奖者');
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage('抽奖完成！已产生中奖者');
+                    this.updateUI();
+                }
             }
             
             // 立即开奖
-            drawNow() {
+            async drawNow() {
                 if (!this.data.drawStarted) {
                     this.showMessage('请先开始抽奖', 'error');
                     return;
@@ -1160,7 +1228,7 @@
                 }
                 
                 // 执行抽奖
-                this.performDraw();
+                await this.performDraw();
                 
                 // 清除倒计时
                 if (this.countdownInterval) {
@@ -1170,7 +1238,7 @@
             }
             
             // 重置抽奖
-            resetDraw() {
+            async resetDraw() {
                 if (!confirm('确定要重置抽奖吗？这将清除中奖结果和抽奖状态。')) {
                     return;
                 }
@@ -1182,22 +1250,18 @@
                 this.data.winnersAnnounced = false;
                 
                 // 保存数据
-                this.saveData();
-                
-                // 更新显示
-                document.getElementById('drawStatusText').textContent = '未开始';
-                this.updateParticipantCountdown();
-                this.updateAdminCountdown();
-                this.updateWinnersDisplay();
-                this.updateAdminWinnersList();
-                
-                // 清除倒计时
-                if (this.countdownInterval) {
-                    clearInterval(this.countdownInterval);
-                    this.countdownInterval = null;
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage('抽奖已重置');
+                    
+                    // 清除倒计时
+                    if (this.countdownInterval) {
+                        clearInterval(this.countdownInterval);
+                        this.countdownInterval = null;
+                    }
+                    
+                    this.updateUI();
                 }
-                
-                this.showMessage('抽奖已重置');
             }
             
             // 更新中奖者显示（参与者视图）
@@ -1209,25 +1273,41 @@
                     return;
                 }
                 
-                winnersListElement.innerHTML = '<h3 style="text-align: center; margin-bottom: 15px; color: #4a00e0;"><i class="fas fa-crown"></i> 中奖名单</h3>';
+                winnersListElement.innerHTML = '<h3 style="text-align: center; margin-bottom: 15px; color: #6a11cb;"><i class="fas fa-crown"></i> 中奖名单</h3>';
                 
                 this.data.winners.forEach((winner, index) => {
                     const winnerItem = document.createElement('div');
                     winnerItem.className = 'winner-item';
                     
-                    let rankText = '';
-                    if (index === 0) {
-                        rankText = '<i class="fas fa-crown" style="color: gold; margin-right: 8px;"></i> 一等奖';
-                    } else if (index === 1) {
-                        rankText = '<i class="fas fa-medal" style="color: silver; margin-right: 8px;"></i> 二等奖';
-                    } else if (index === 2) {
-                        rankText = '<i class="fas fa-medal" style="color: #cd7f32; margin-right: 8px;"></i> 三等奖';
-                    } else {
-                        rankText = `<i class="fas fa-award" style="color: #4a00e0; margin-right: 8px;"></i> 幸运奖`;
-                    }
+                    let rankText = '🏆 一等奖';
                     
                     winnerItem.innerHTML = `${rankText}: ${winner.name}`;
                     winnersListElement.appendChild(winnerItem);
+                });
+            }
+            
+            // 更新参与者列表（管理员视图）
+            updateAdminParticipantList() {
+                const listElement = document.getElementById('adminParticipantList');
+                
+                if (this.data.participants.length === 0) {
+                    listElement.innerHTML = '<div class="empty-message">暂无参与者</div>';
+                    return;
+                }
+                
+                listElement.innerHTML = '';
+                
+                this.data.participants.forEach((participant, index) => {
+                    const participantItem = document.createElement('div');
+                    participantItem.className = 'participant-item';
+                    participantItem.innerHTML = `
+                        <div>
+                            <div class="participant-name">${index + 1}. ${participant.name}</div>
+                            <div class="participant-time">参与时间: ${participant.time}</div>
+                        </div>
+                    `;
+                    
+                    listElement.appendChild(participantItem);
                 });
             }
             
@@ -1246,27 +1326,18 @@
                     const winnerItem = document.createElement('div');
                     winnerItem.className = 'winner-item';
                     
-                    let rankText = '';
-                    if (index === 0) {
-                        rankText = '<i class="fas fa-crown" style="color: gold; margin-right: 8px;"></i> 一等奖';
-                    } else if (index === 1) {
-                        rankText = '<i class="fas fa-medal" style="color: silver; margin-right: 8px;"></i> 二等奖';
-                    } else if (index === 2) {
-                        rankText = '<i class="fas fa-medal" style="color: #cd7f32; margin-right: 8px;"></i> 三等奖';
-                    } else {
-                        rankText = `<i class="fas fa-award" style="color: #4a00e0; margin-right: 8px;"></i> 幸运奖`;
-                    }
+                    let rankText = '🏆 一等奖';
                     
                     winnerItem.innerHTML = `
                         <div>${rankText}: ${winner.name}</div>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">参与时间: ${winner.time}</div>
+                        <div style="font-size: 0.9rem; color: #8b6b00; margin-top: 5px;">参与时间: ${winner.time}</div>
                     `;
                     winnersListElement.appendChild(winnerItem);
                 });
             }
             
             // 公布中奖结果
-            announceWinners() {
+            async announceWinners() {
                 if (!this.data.winners || this.data.winners.length === 0) {
                     this.showMessage('请先开奖', 'error');
                     return;
@@ -1278,67 +1349,13 @@
                 }
                 
                 this.data.winnersAnnounced = true;
-                this.saveData();
                 
-                this.updateWinnersDisplay();
-                this.showMessage('中奖结果已公布！参与者现在可以看到中奖名单');
-            }
-            
-            // 更新分享链接
-            updateShareLink() {
-                const shareLink = window.location.origin + window.location.pathname;
-                document.getElementById('shareLinkText').textContent = shareLink;
-            }
-            
-            // 复制分享链接
-            copyShareLink() {
-                const shareLink = window.location.origin + window.location.pathname;
-                
-                navigator.clipboard.writeText(shareLink).then(() => {
-                    this.showMessage('链接已复制到剪贴板');
-                }).catch(err => {
-                    // 如果clipboard API不可用，使用传统方法
-                    const textArea = document.createElement('textarea');
-                    textArea.value = shareLink;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    this.showMessage('链接已复制到剪贴板');
-                });
-            }
-            
-            // 分享到QQ
-            shareToQQ() {
-                const shareLink = window.location.origin + window.location.pathname;
-                const prizeName = encodeURIComponent(this.data.prizeName);
-                const participantCount = this.data.participants.length;
-                const winnerCount = this.data.winnerCount;
-                
-                // 创建分享文本
-                const shareText = `【抽奖活动】\n奖品：${this.data.prizeName}\n已参与：${participantCount}人\n中奖名额：${winnerCount}个\n\n点击链接参与：${shareLink}`;
-                
-                // QQ分享链接格式
-                const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(shareLink)}&title=${encodeURIComponent('抽奖活动')}&summary=${encodeURIComponent(shareText)}`;
-                
-                window.open(qqShareUrl, '_blank', 'width=600,height=400');
-            }
-            
-            // 导出数据
-            exportData() {
-                const dataStr = JSON.stringify(this.data, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                
-                const url = URL.createObjectURL(dataBlob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `抽奖数据_${new Date().toISOString().slice(0, 10)}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                this.showMessage('数据已导出');
+                // 保存数据
+                const saved = await this.saveData();
+                if (saved) {
+                    this.showMessage('中奖结果已公布！参与者现在可以看到中奖名单');
+                    this.updateWinnersDisplay();
+                }
             }
             
             // 导出参与者名单
@@ -1363,22 +1380,71 @@
                 this.showMessage('参与者名单已导出');
             }
             
-            // 添加测试数据
-            addTestParticipants() {
-                const testNames = [
-                    "张三", "李四", "王五", "赵六", "钱七", 
-                    "测试用户1", "测试用户2", "测试用户3", "测试用户4", "测试用户5"
-                ];
+            // 保存云端配置
+            saveCloudConfig() {
+                const gistId = document.getElementById('gistIdInput').value.trim();
+                const githubToken = document.getElementById('githubTokenInput').value.trim();
+                const syncInterval = parseInt(document.getElementById('syncIntervalInput').value) || 10;
                 
-                let addedCount = 0;
-                testNames.forEach(name => {
-                    const result = this.addParticipant(name);
-                    if (result.success) {
-                        addedCount++;
+                if (!gistId || !githubToken) {
+                    this.showMessage('请填写Gist ID和GitHub Token', 'error');
+                    return;
+                }
+                
+                this.config.gistId = gistId;
+                this.config.githubToken = githubToken;
+                this.config.syncInterval = syncInterval;
+                
+                this.saveConfig();
+                this.showMessage('配置已保存');
+                
+                // 加载数据
+                this.loadData();
+            }
+            
+            // 测试连接
+            async testConnection() {
+                const gistId = document.getElementById('gistIdInput').value.trim();
+                const githubToken = document.getElementById('githubTokenInput').value.trim();
+                
+                if (!gistId || !githubToken) {
+                    this.showMessage('请填写Gist ID和GitHub Token', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+                        headers: {
+                            'Authorization': `token ${githubToken}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     }
-                });
+                    
+                    this.showMessage('连接测试成功！');
+                } catch (error) {
+                    this.showMessage(`连接测试失败: ${error.message}`, 'error');
+                }
+            }
+            
+            // 更新同步状态
+            updateSyncStatus(message, type = 'info') {
+                const statusElement = document.getElementById('syncStatusText');
+                statusElement.textContent = message;
+                statusElement.className = '';
                 
-                this.showMessage(`已添加 ${addedCount} 个测试参与者`);
+                if (type === 'success') {
+                    statusElement.style.color = '#155724';
+                    statusElement.style.fontWeight = '600';
+                } else if (type === 'error') {
+                    statusElement.style.color = '#721c24';
+                    statusElement.style.fontWeight = '600';
+                } else {
+                    statusElement.style.color = '#666';
+                }
             }
             
             // 显示消息
@@ -1389,7 +1455,7 @@
                     position: fixed;
                     top: 20px;
                     right: 20px;
-                    background: ${type === 'error' ? '#ff416c' : '#4a00e0'};
+                    background: ${type === 'error' ? '#ff416c' : '#6a11cb'};
                     color: white;
                     padding: 15px 20px;
                     border-radius: 8px;
@@ -1414,20 +1480,12 @@
         // 初始化应用程序
         document.addEventListener('DOMContentLoaded', function() {
             // 创建抽奖管理器
-            const lotteryManager = new LotteryManager();
-            
-            // 初始化参与者视图
-            lotteryManager.initParticipantView();
-            
-            // 显示管理员入口（如果不是管理员模式）
-            if (!lotteryManager.isAdmin) {
-                document.getElementById('adminAccessSection').style.display = 'block';
-            }
+            const lotteryManager = new GameLotteryManager();
             
             // 参与者加入事件
-            document.getElementById('joinBtn').addEventListener('click', function() {
+            document.getElementById('joinBtn').addEventListener('click', async function() {
                 const name = document.getElementById('joinName').value.trim();
-                const result = lotteryManager.addParticipant(name);
+                const result = await lotteryManager.addParticipant(name);
                 
                 const statusElement = document.getElementById('joinStatus');
                 if (result.success) {
@@ -1449,21 +1507,16 @@
                 }
             });
             
-            // 复制分享链接
-            document.getElementById('copyShareLink').addEventListener('click', function() {
-                lotteryManager.copyShareLink();
-            });
-            
-            // 分享到QQ
-            document.getElementById('shareQQ').addEventListener('click', function() {
-                lotteryManager.shareToQQ();
+            // 刷新数据
+            document.getElementById('refreshDataBtn').addEventListener('click', function() {
+                lotteryManager.loadData();
             });
             
             // 管理员登录
             document.getElementById('adminLoginBtn').addEventListener('click', function() {
                 const adminKey = document.getElementById('adminKeyInput').value;
                 
-                if (adminKey === lotteryManager.data.adminKey) {
+                if (adminKey === lotteryManager.config.adminKey) {
                     // 重定向到管理员模式
                     const newUrl = window.location.origin + window.location.pathname + '?admin=' + adminKey;
                     window.location.href = newUrl;
@@ -1492,11 +1545,6 @@
                 lotteryManager.resetDraw();
             });
             
-            // 导出数据
-            document.getElementById('exportDataBtn').addEventListener('click', function() {
-                lotteryManager.exportData();
-            });
-            
             // 清空参与者
             document.getElementById('clearParticipantsBtn').addEventListener('click', function() {
                 lotteryManager.clearParticipants();
@@ -1507,31 +1555,19 @@
                 lotteryManager.exportParticipants();
             });
             
-            // 添加测试数据
-            document.getElementById('addTestParticipantsBtn').addEventListener('click', function() {
-                lotteryManager.addTestParticipants();
-            });
-            
             // 公布中奖结果
             document.getElementById('announceWinnersBtn').addEventListener('click', function() {
                 lotteryManager.announceWinners();
             });
             
-            // 管理员标签切换
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // 更新标签状态
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 显示对应内容
-                    document.querySelectorAll('.tab-content.admin-only').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    document.getElementById(tabId).classList.add('active');
-                });
+            // 保存云端配置
+            document.getElementById('saveConfigBtn').addEventListener('click', function() {
+                lotteryManager.saveCloudConfig();
+            });
+            
+            // 测试连接
+            document.getElementById('testConnectionBtn').addEventListener('click', function() {
+                lotteryManager.testConnection();
             });
             
             // 添加CSS动画
@@ -1551,5 +1587,4 @@
         });
     </script>
 </body>
-
 </html>
